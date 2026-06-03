@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DB 쇼핑몰</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f4f6f9;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── 헤더 ── */
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    header h1 { font-size: 1.4rem; letter-spacing: -0.5px; }
+    header span { font-size: 1.6rem; }
+
+    /* ── 탭 내비 ── */
+    nav {
+      background: #fff;
+      border-bottom: 2px solid #e8ecf0;
+      display: flex;
+      padding: 0 32px;
+      gap: 4px;
+    }
+    nav button {
+      padding: 14px 22px;
+      border: none;
+      background: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all .2s;
+      font-weight: 500;
+    }
+    nav button.active {
+      color: #4f6ef7;
+      border-bottom-color: #4f6ef7;
+    }
+    nav button:hover:not(.active) { color: #333; }
+
+    /* ── 공통 레이아웃 ── */
+    main { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── 카드 ── */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+    .card h2 { font-size: 1.1rem; margin-bottom: 16px; color: #1a1a2e; }
+
+    /* ── 검색 바 ── */
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .search-bar input, .search-bar select {
+      padding: 10px 14px;
+      border: 1.5px solid #dde1e8;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .search-bar input { flex: 1; min-width: 200px; }
+    .search-bar input:focus, .search-bar select:focus { border-color: #4f6ef7; }
+
+    /* ── 버튼 ── */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity .2s, transform .1s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary  { background: #4f6ef7; color: #fff; }
+    .btn-primary:hover:not(:disabled)  { background: #3a5be8; }
+    .btn-success  { background: #22c55e; color: #fff; }
+    .btn-success:hover:not(:disabled)  { background: #16a34a; }
+    .btn-danger   { background: #ef4444; color: #fff; padding: 6px 12px; font-size: 0.8rem; }
+    .btn-danger:hover:not(:disabled)   { background: #dc2626; }
+    .btn-outline  { background: #fff; color: #4f6ef7; border: 1.5px solid #4f6ef7; }
+    .btn-outline:hover { background: #eef1fe; }
+
+    /* ── 상품 그리드 ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .product-card {
+      background: #fff;
+      border: 1.5px solid #e8ecf0;
+      border-radius: 12px;
+      padding: 20px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); transform: translateY(-2px); }
+    .product-card .category-badge {
+      display: inline-block;
+      padding: 3px 9px;
+      background: #eef1fe;
+      color: #4f6ef7;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .product-card h3 { font-size: 0.95rem; margin-bottom: 6px; line-height: 1.4; }
+    .product-card .desc { font-size: 0.8rem; color: #888; margin-bottom: 12px; min-height: 36px; line-height: 1.4; }
+    .product-card .price { font-size: 1.15rem; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+    .stock-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .stock-ok   { background: #dcfce7; color: #166534; }
+    .stock-low  { background: #fef9c3; color: #854d0e; }
+    .stock-out  { background: #fee2e2; color: #991b1b; }
+
+    /* ── 장바구니 ── */
+    .cart-empty { text-align: center; padding: 32px; color: #aaa; font-size: 0.95rem; }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cart-item:last-child { border-bottom: none; }
+    .cart-item .name { flex: 1; font-size: 0.9rem; font-weight: 500; }
+    .cart-item .qty-ctrl { display: flex; align-items: center; gap: 8px; }
+    .qty-btn {
+      width: 28px; height: 28px;
+      border: 1.5px solid #dde1e8;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      color: #444;
+      transition: background .15s;
+    }
+    .qty-btn:hover { background: #f0f3ff; }
+    .cart-item .subtotal { font-weight: 600; font-size: 0.9rem; min-width: 90px; text-align: right; }
+    .cart-total {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      padding-top: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .cart-total .amount { font-size: 1.3rem; color: #4f6ef7; }
+
+    /* ── 주문 폼 ── */
+    .order-form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .order-form select {
+      padding: 10px 14px;
+      border: 1.5px solid #dde1e8;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      min-width: 180px;
+    }
+
+    /* ── 알림 배너 ── */
+    .alert {
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .alert.show { display: block; }
+    .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+    /* ── 주문 내역 ── */
+    .order-select-bar {
+      display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .order-select-bar select {
+      padding: 10px 14px;
+      border: 1.5px solid #dde1e8;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .order-card {
+      background: #fff;
+      border: 1.5px solid #e8ecf0;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+    }
+    .order-card .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .order-card .order-id { font-weight: 700; font-size: 0.95rem; }
+    .order-card .order-date { font-size: 0.8rem; color: #888; }
+    .order-card .order-total { font-size: 1.1rem; font-weight: 700; color: #4f6ef7; }
+    .order-items-list { border-top: 1px solid #f0f0f0; padding-top: 10px; }
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 4px 0;
+      color: #555;
+    }
+
+    /* ── 통계 테이블 ── */
+    .stats-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .stats-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-bottom: 2px solid #e8ecf0;
+      font-weight: 600;
+      color: #555;
+    }
+    .stats-table td { padding: 12px 14px; border-bottom: 1px solid #f0f0f0; }
+    .stats-table tr:last-child td { border-bottom: none; }
+    .stats-table tr:hover td { background: #fafbff; }
+    .stats-table .rank { font-weight: 700; color: #4f6ef7; }
+    .revenue-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: #e8ecf0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill { height: 100%; background: #4f6ef7; border-radius: 4px; transition: width .6s; }
+
+    /* ── 로딩 ── */
+    .loading { text-align: center; padding: 40px; color: #aaa; }
+    .spinner {
+      display: inline-block;
+      width: 24px; height: 24px;
+      border: 3px solid #dde1e8;
+      border-top-color: #4f6ef7;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin-bottom: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── 빈 상태 ── */
+    .empty-state { text-align: center; padding: 48px 20px; color: #bbb; }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span>🛒</span>
+  <h1>DB 쇼핑몰</h1>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('products')">상품 목록</button>
+  <button onclick="switchTab('cart')">장바구니 <span id="cart-badge"></span></button>
+  <button onclick="switchTab('orders')">주문 내역</button>
+  <button onclick="switchTab('stats')">매출 통계</button>
+</nav>
+
+<main>
+
+  <!-- ── 탭 1: 상품 목록 ── -->
+  <div id="tab-products" class="tab-panel active">
+    <div class="search-bar">
+      <input id="search-input" type="text" placeholder="상품명 또는 설명 검색…" oninput="debounceSearch()">
+      <select id="category-filter" onchange="fetchProducts()">
+        <option value="">전체 카테고리</option>
+        <option value="전자제품">전자제품</option>
+        <option value="사무용품">사무용품</option>
+      </select>
+      <button class="btn btn-outline" onclick="fetchProducts()">검색</button>
+    </div>
+    <div id="product-grid" class="product-grid">
+      <div class="loading"><div class="spinner"></div><br>상품을 불러오는 중…</div>
+    </div>
+  </div>
+
+  <!-- ── 탭 2: 장바구니 ── -->
+  <div id="tab-cart" class="tab-panel">
+    <div class="card">
+      <h2>장바구니</h2>
+      <div id="cart-alert" class="alert"></div>
+      <div id="cart-list"></div>
+      <div class="order-form">
+        <label style="font-weight:600; font-size:.9rem;">주문자:</label>
+        <select id="user-select">
+          <option value="">-- 유저 선택 --</option>
+        </select>
+        <button class="btn btn-success" onclick="placeOrder()">주문하기</button>
+        <button class="btn btn-outline" onclick="clearCart()">장바구니 비우기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 탭 3: 주문 내역 ── -->
+  <div id="tab-orders" class="tab-panel">
+    <div class="order-select-bar">
+      <label style="font-weight:600; font-size:.9rem;">유저:</label>
+      <select id="order-user-select" onchange="fetchOrders()">
+        <option value="">-- 유저 선택 --</option>
+      </select>
+    </div>
+    <div id="orders-list">
+      <div class="empty-state">
+        <div class="icon">📦</div>
+        <p>유저를 선택하면 주문 내역을 볼 수 있습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 탭 4: 매출 통계 ── -->
+  <div id="tab-stats" class="tab-panel">
+    <div class="card">
+      <h2>상품별 매출 집계</h2>
+      <div id="stats-content">
+        <div class="loading"><div class="spinner"></div><br>통계를 불러오는 중…</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // ── 전역 상태 ────────────────────────────────────────────────
+  let cart = [];          // [{ product, quantity }]
+  let searchTimer = null;
+
+  // ── 탭 전환 ─────────────────────────────────────────────────
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+
+    document.getElementById(`tab-${name}`).classList.add('active');
+    document.querySelectorAll('nav button')[
+      ['products','cart','orders','stats'].indexOf(name)
+    ].classList.add('active');
+
+    if (name === 'cart')    renderCart();
+    if (name === 'orders')  loadUsers('order-user-select');
+    if (name === 'stats')   fetchStats();
+  }
+
+  // ── 유틸 ────────────────────────────────────────────────────
+  const fmt = (n) => Number(n).toLocaleString('ko-KR') + '원';
+
+  function showAlert(id, msg, type) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = `alert ${type} show`;
+    setTimeout(() => el.classList.remove('show'), 4000);
+  }
+
+  function debounceSearch() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(fetchProducts, 350);
+  }
+
+  // ── 유저 목록 로드 (드롭다운용) ─────────────────────────────
+  async function loadUsers(selectId) {
+    try {
+      const users = await fetch('/users').then(r => r.json());
+      const sel   = document.getElementById(selectId);
+      const prev  = sel.value;
+      sel.innerHTML = '<option value="">-- 유저 선택 --</option>';
+      users.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value       = u.id;
+        opt.textContent = `${u.name} (${u.email})`;
+        sel.appendChild(opt);
+      });
+      if (prev) sel.value = prev;
+    } catch (e) {
+      console.error('유저 로드 실패:', e);
+    }
+  }
+
+  // ── 상품 목록 ────────────────────────────────────────────────
+  async function fetchProducts() {
+    const grid     = document.getElementById('product-grid');
+    const search   = document.getElementById('search-input').value.trim();
+    const category = document.getElementById('category-filter').value;
+
+    grid.innerHTML = '<div class="loading"><div class="spinner"></div><br>상품을 불러오는 중…</div>';
+
+    const params = new URLSearchParams();
+    if (search)   params.append('search',   search);
+    if (category) params.append('category', category);
+
+    try {
+      const products = await fetch(`/products?${params}`).then(r => r.json());
+
+      if (products.length === 0) {
+        grid.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>검색 결과가 없습니다.</p></div>';
+        return;
+      }
+
+      grid.innerHTML = products.map(p => {
+        const stockClass = p.stock === 0 ? 'stock-out' : p.stock <= 5 ? 'stock-low' : 'stock-ok';
+        const stockLabel = p.stock === 0 ? '품절' : p.stock <= 5 ? `재고 ${p.stock}개` : `재고 ${p.stock}개`;
+        return `
+          <div class="product-card">
+            <span class="category-badge">${p.category || '기타'}</span>
+            <h3>${p.name}</h3>
+            <p class="desc">${p.description || ''}</p>
+            <div class="price">${fmt(p.price)}</div>
+            <span class="stock-badge ${stockClass}">${stockLabel}</span><br>
+            <button class="btn btn-primary" style="width:100%;margin-top:4px"
+              ${p.stock === 0 ? 'disabled' : ''}
+              onclick='addToCart(${JSON.stringify(p)})'>
+              장바구니 추가
+            </button>
+          </div>`;
+      }).join('');
+    } catch (e) {
+      grid.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>서버 연결 실패: ${e.message}</p></div>`;
+    }
+  }
+
+  // ── 장바구니 ─────────────────────────────────────────────────
+  function addToCart(product) {
+    const existing = cart.find(i => i.product.id === product.id);
+    if (existing) {
+      if (existing.quantity >= product.stock) {
+        alert(`"${product.name}" 재고(${product.stock}개)를 초과할 수 없습니다.`);
+        return;
+      }
+      existing.quantity++;
+    } else {
+      cart.push({ product, quantity: 1 });
+    }
+    updateCartBadge();
+    // 추가 알림
+    const msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#22c55e;color:#fff;padding:12px 20px;border-radius:8px;font-weight:600;z-index:999;animation:fadeIn .3s';
+    msg.textContent = `"${product.name}" 추가됨`;
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 1800);
+  }
+
+  function updateCartBadge() {
+    const total = cart.reduce((s, i) => s + i.quantity, 0);
+    document.getElementById('cart-badge').textContent = total > 0 ? `(${total})` : '';
+  }
+
+  function changeQty(productId, delta) {
+    const item = cart.find(i => i.product.id === productId);
+    if (!item) return;
+    item.quantity += delta;
+    if (item.quantity <= 0) cart = cart.filter(i => i.product.id !== productId);
+    updateCartBadge();
+    renderCart();
+  }
+
+  function clearCart() {
+    if (cart.length === 0) return;
+    if (!confirm('장바구니를 비우시겠습니까?')) return;
+    cart = [];
+    updateCartBadge();
+    renderCart();
+  }
+
+  function renderCart() {
+    const el = document.getElementById('cart-list');
+
+    if (cart.length === 0) {
+      el.innerHTML = '<div class="cart-empty">장바구니가 비어 있습니다.</div>';
+      return;
+    }
+
+    const total = cart.reduce((s, i) => s + parseFloat(i.product.price) * i.quantity, 0);
+
+    el.innerHTML = `
+      ${cart.map(i => `
+        <div class="cart-item">
+          <span class="name">${i.product.name}</span>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${i.product.id}, -1)">−</button>
+            <span style="min-width:24px;text-align:center;font-weight:600">${i.quantity}</span>
+            <button class="qty-btn" onclick="changeQty(${i.product.id}, 1)"
+              ${i.quantity >= i.product.stock ? 'disabled style="opacity:.4"' : ''}>+</button>
+          </div>
+          <span style="font-size:.8rem;color:#888">${fmt(i.product.price)} × ${i.quantity}</span>
+          <span class="subtotal">${fmt(parseFloat(i.product.price) * i.quantity)}</span>
+          <button class="btn btn-danger" onclick="changeQty(${i.product.id}, -999)">✕</button>
+        </div>
+      `).join('')}
+      <div class="cart-total">
+        <span>합계</span>
+        <span class="amount">${fmt(total)}</span>
+      </div>`;
+
+    // 유저 드롭다운 채우기
+    loadUsers('user-select');
+  }
+
+  async function placeOrder() {
+    const userId = document.getElementById('user-select').value;
+    if (!userId) { showAlert('cart-alert', '주문자를 선택해주세요.', 'alert-error'); return; }
+    if (cart.length === 0) { showAlert('cart-alert', '장바구니가 비어 있습니다.', 'alert-error'); return; }
+
+    const items = cart.map(i => ({ productId: i.product.id, quantity: i.quantity }));
+
+    try {
+      const res  = await fetch('/orders', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ userId: Number(userId), items }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showAlert('cart-alert', `주문 실패: ${data.error}`, 'alert-error');
+        return;
+      }
+
+      showAlert('cart-alert', `✅ 주문 완료! (주문번호: #${data.orderId}, 결제금액: ${fmt(data.totalAmount)})`, 'alert-success');
+      cart = [];
+      updateCartBadge();
+      renderCart();
+      fetchProducts(); // 재고 업데이트 반영
+    } catch (e) {
+      showAlert('cart-alert', `네트워크 오류: ${e.message}`, 'alert-error');
+    }
+  }
+
+  // ── 주문 내역 ─────────────────────────────────────────────────
+  async function fetchOrders() {
+    const userId = document.getElementById('order-user-select').value;
+    const el     = document.getElementById('orders-list');
+
+    if (!userId) {
+      el.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>유저를 선택하면 주문 내역을 볼 수 있습니다.</p></div>';
+      return;
+    }
+
+    el.innerHTML = '<div class="loading"><div class="spinner"></div><br>주문 내역을 불러오는 중…</div>';
+
+    try {
+      const orders = await fetch(`/orders/${userId}`).then(r => r.json());
+
+      if (orders.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>주문 내역이 없습니다.</p></div>';
+        return;
+      }
+
+      el.innerHTML = orders.map(o => {
+        const date = new Date(o.created_at).toLocaleString('ko-KR');
+        const itemsHtml = o.items.map(i => `
+          <div class="order-item-row">
+            <span>${i.product_name} × ${i.quantity}</span>
+            <span>${fmt(i.subtotal)}</span>
+          </div>`).join('');
+
+        return `
+          <div class="order-card">
+            <div class="order-header">
+              <div>
+                <span class="order-id">주문 #${o.order_id}</span>
+                <span class="order-date" style="margin-left:10px">${date}</span>
+              </div>
+              <span class="order-total">${fmt(o.total_amount)}</span>
+            </div>
+            <div class="order-items-list">${itemsHtml}</div>
+          </div>`;
+      }).join('');
+    } catch (e) {
+      el.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>오류: ${e.message}</p></div>`;
+    }
+  }
+
+  // ── 매출 통계 ─────────────────────────────────────────────────
+  async function fetchStats() {
+    const el = document.getElementById('stats-content');
+    el.innerHTML = '<div class="loading"><div class="spinner"></div><br>통계를 불러오는 중…</div>';
+
+    try {
+      const stats = await fetch('/stats').then(r => r.json());
+      const maxRev = Math.max(...stats.map(s => parseFloat(s.total_revenue)), 1);
+
+      el.innerHTML = `
+        <table class="stats-table">
+          <thead>
+            <tr>
+              <th style="width:40px">#</th>
+              <th>상품명</th>
+              <th>카테고리</th>
+              <th style="text-align:right">판매 수량</th>
+              <th style="min-width:200px">매출 (비율)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${stats.map((s, i) => {
+              const pct = Math.round(parseFloat(s.total_revenue) / maxRev * 100);
+              return `
+                <tr>
+                  <td class="rank">${i + 1}</td>
+                  <td><strong>${s.name}</strong></td>
+                  <td><span class="category-badge">${s.category || '기타'}</span></td>
+                  <td style="text-align:right">${Number(s.total_quantity_sold).toLocaleString()}개</td>
+                  <td>
+                    <div class="revenue-bar">
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width:${pct}%"></div>
+                      </div>
+                      <span style="font-size:.85rem;font-weight:600;min-width:80px;text-align:right">
+                        ${fmt(s.total_revenue)}
+                      </span>
+                    </div>
+                  </td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+        </table>`;
+    } catch (e) {
+      el.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>오류: ${e.message}</p></div>`;
+    }
+  }
+
+  // ── 초기 로드 ─────────────────────────────────────────────────
+  fetchProducts();
+  loadUsers('user-select');
+</script>
+
+</body>
+</html>
