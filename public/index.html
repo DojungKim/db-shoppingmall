@@ -14,7 +14,6 @@
       min-height: 100vh;
     }
 
-    /* ── 헤더 ── */
     header {
       background: #1a1a2e;
       color: #fff;
@@ -24,10 +23,8 @@
       gap: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,.3);
     }
-    header h1 { font-size: 1.4rem; letter-spacing: -0.5px; }
-    header span { font-size: 1.6rem; }
+    header h1 { font-size: 1.4rem; }
 
-    /* ── 탭 내비 ── */
     nav {
       background: #fff;
       border-bottom: 2px solid #e8ecf0;
@@ -47,18 +44,13 @@
       transition: all .2s;
       font-weight: 500;
     }
-    nav button.active {
-      color: #4f6ef7;
-      border-bottom-color: #4f6ef7;
-    }
+    nav button.active { color: #4f6ef7; border-bottom-color: #4f6ef7; }
     nav button:hover:not(.active) { color: #333; }
 
-    /* ── 공통 레이아웃 ── */
     main { max-width: 1100px; margin: 0 auto; padding: 28px 20px; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* ── 카드 ── */
     .card {
       background: #fff;
       border-radius: 12px;
@@ -68,7 +60,6 @@
     }
     .card h2 { font-size: 1.1rem; margin-bottom: 16px; color: #1a1a2e; }
 
-    /* ── 검색 바 ── */
     .search-bar {
       display: flex;
       gap: 10px;
@@ -86,7 +77,6 @@
     .search-bar input { flex: 1; min-width: 200px; }
     .search-bar input:focus, .search-bar select:focus { border-color: #4f6ef7; }
 
-    /* ── 버튼 ── */
     .btn {
       padding: 10px 20px;
       border: none;
@@ -98,16 +88,15 @@
     }
     .btn:active { transform: scale(0.97); }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-    .btn-primary  { background: #4f6ef7; color: #fff; }
-    .btn-primary:hover:not(:disabled)  { background: #3a5be8; }
-    .btn-success  { background: #22c55e; color: #fff; }
-    .btn-success:hover:not(:disabled)  { background: #16a34a; }
-    .btn-danger   { background: #ef4444; color: #fff; padding: 6px 12px; font-size: 0.8rem; }
-    .btn-danger:hover:not(:disabled)   { background: #dc2626; }
-    .btn-outline  { background: #fff; color: #4f6ef7; border: 1.5px solid #4f6ef7; }
+    .btn-primary { background: #4f6ef7; color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #3a5be8; }
+    .btn-success { background: #22c55e; color: #fff; }
+    .btn-success:hover:not(:disabled) { background: #16a34a; }
+    .btn-danger  { background: #ef4444; color: #fff; padding: 6px 12px; font-size: 0.8rem; }
+    .btn-danger:hover:not(:disabled)  { background: #dc2626; }
+    .btn-outline { background: #fff; color: #4f6ef7; border: 1.5px solid #4f6ef7; }
     .btn-outline:hover { background: #eef1fe; }
 
-    /* ── 상품 그리드 ── */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -121,7 +110,7 @@
       transition: box-shadow .2s, transform .2s;
     }
     .product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); transform: translateY(-2px); }
-    .product-card .category-badge {
+    .category-badge {
       display: inline-block;
       padding: 3px 9px;
       background: #eef1fe;
@@ -142,11 +131,10 @@
       border-radius: 4px;
       margin-bottom: 12px;
     }
-    .stock-ok   { background: #dcfce7; color: #166534; }
-    .stock-low  { background: #fef9c3; color: #854d0e; }
-    .stock-out  { background: #fee2e2; color: #991b1b; }
+    .stock-ok  { background: #dcfce7; color: #166534; }
+    .stock-low { background: #fef9c3; color: #854d0e; }
+    .stock-out { background: #fee2e2; color: #991b1b; }
 
-    /* ── 장바구니 ── */
     .cart-empty { text-align: center; padding: 32px; color: #aaa; font-size: 0.95rem; }
     .cart-item {
       display: flex;
@@ -165,7 +153,6 @@
       background: #fff;
       cursor: pointer;
       font-size: 1rem;
-      line-height: 1;
       display: flex; align-items: center; justify-content: center;
       font-weight: 700;
       color: #444;
@@ -184,7 +171,6 @@
     }
     .cart-total .amount { font-size: 1.3rem; color: #4f6ef7; }
 
-    /* ── 주문 폼 ── */
     .order-form {
       display: flex;
       align-items: center;
@@ -192,15 +178,16 @@
       margin-top: 16px;
       flex-wrap: wrap;
     }
-    .order-form select {
+    .order-form input[type="text"] {
       padding: 10px 14px;
       border: 1.5px solid #dde1e8;
       border-radius: 8px;
       font-size: 0.9rem;
       min-width: 180px;
+      outline: none;
     }
+    .order-form input:focus { border-color: #4f6ef7; }
 
-    /* ── 알림 배너 ── */
     .alert {
       padding: 12px 18px;
       border-radius: 8px;
@@ -213,16 +200,18 @@
     .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
     .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
-    /* ── 주문 내역 ── */
-    .order-select-bar {
-      display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;
+    .order-search-bar {
+      display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
     }
-    .order-select-bar select {
+    .order-search-bar input {
       padding: 10px 14px;
       border: 1.5px solid #dde1e8;
       border-radius: 8px;
       font-size: 0.9rem;
+      min-width: 200px;
+      outline: none;
     }
+    .order-search-bar input:focus { border-color: #4f6ef7; }
     .order-card {
       background: #fff;
       border: 1.5px solid #e8ecf0;
@@ -237,7 +226,7 @@
       margin-bottom: 12px;
     }
     .order-card .order-id { font-weight: 700; font-size: 0.95rem; }
-    .order-card .order-date { font-size: 0.8rem; color: #888; }
+    .order-card .order-date { font-size: 0.8rem; color: #888; margin-left: 10px; }
     .order-card .order-total { font-size: 1.1rem; font-weight: 700; color: #4f6ef7; }
     .order-items-list { border-top: 1px solid #f0f0f0; padding-top: 10px; }
     .order-item-row {
@@ -248,7 +237,6 @@
       color: #555;
     }
 
-    /* ── 통계 테이블 ── */
     .stats-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .stats-table th {
       text-align: left;
@@ -262,21 +250,47 @@
     .stats-table tr:last-child td { border-bottom: none; }
     .stats-table tr:hover td { background: #fafbff; }
     .stats-table .rank { font-weight: 700; color: #4f6ef7; }
-    .revenue-bar {
+    .revenue-bar { display: flex; align-items: center; gap: 8px; }
+    .bar-track { flex: 1; height: 8px; background: #e8ecf0; border-radius: 4px; overflow: hidden; }
+    .bar-fill  { height: 100%; background: #4f6ef7; border-radius: 4px; transition: width .6s; }
+
+    /* ── 벤치마크 ── */
+    .bench-controls {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
-    .bar-track {
-      flex: 1;
-      height: 8px;
-      background: #e8ecf0;
-      border-radius: 4px;
-      overflow: hidden;
+    .runs-btn {
+      padding: 8px 16px;
+      border: 1.5px solid #dde1e8;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #555;
+      transition: all .15s;
     }
-    .bar-fill { height: 100%; background: #4f6ef7; border-radius: 4px; transition: width .6s; }
+    .runs-btn.active { border-color: #4f6ef7; background: #eef1fe; color: #4f6ef7; }
+    .bench-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .bench-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-bottom: 2px solid #e8ecf0;
+      font-weight: 600;
+      color: #555;
+    }
+    .bench-table td { padding: 12px 14px; border-bottom: 1px solid #f0f0f0; }
+    .bench-table tr:last-child td { border-bottom: none; }
+    .bench-table tr:hover td { background: #fafbff; }
+    .ms-val { font-weight: 700; color: #1a1a2e; }
+    .ms-fast { color: #16a34a; }
+    .ms-slow { color: #dc2626; }
+    .bench-note { font-size: 0.8rem; color: #aaa; margin-top: 12px; }
 
-    /* ── 로딩 ── */
     .loading { text-align: center; padding: 40px; color: #aaa; }
     .spinner {
       display: inline-block;
@@ -288,11 +302,8 @@
       margin-bottom: 8px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── 빈 상태 ── */
     .empty-state { text-align: center; padding: 48px 20px; color: #bbb; }
     .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
-    .empty-state p { font-size: 0.95rem; }
   </style>
 </head>
 <body>
@@ -307,6 +318,7 @@
   <button onclick="switchTab('cart')">장바구니 <span id="cart-badge"></span></button>
   <button onclick="switchTab('orders')">주문 내역</button>
   <button onclick="switchTab('stats')">매출 통계</button>
+  <button onclick="switchTab('benchmark')">성능 측정</button>
 </nav>
 
 <main>
@@ -334,28 +346,24 @@
       <div id="cart-alert" class="alert"></div>
       <div id="cart-list"></div>
       <div class="order-form">
-        <label style="font-weight:600; font-size:.9rem;">주문자:</label>
-        <select id="user-select">
-          <option value="">-- 유저 선택 --</option>
-        </select>
+        <label style="font-weight:600;font-size:.9rem;">주문자 이름:</label>
+        <input type="text" id="user-name-input" placeholder="이름 입력 (예: 김철수)">
         <button class="btn btn-success" onclick="placeOrder()">주문하기</button>
-        <button class="btn btn-outline" onclick="clearCart()">장바구니 비우기</button>
+        <button class="btn btn-outline" onclick="clearCart()">비우기</button>
       </div>
     </div>
   </div>
 
   <!-- ── 탭 3: 주문 내역 ── -->
   <div id="tab-orders" class="tab-panel">
-    <div class="order-select-bar">
-      <label style="font-weight:600; font-size:.9rem;">유저:</label>
-      <select id="order-user-select" onchange="fetchOrders()">
-        <option value="">-- 유저 선택 --</option>
-      </select>
+    <div class="order-search-bar">
+      <input type="text" id="order-name-input" placeholder="주문자 이름 입력 (예: 김철수)">
+      <button class="btn btn-primary" onclick="fetchOrders()">조회</button>
     </div>
     <div id="orders-list">
       <div class="empty-state">
         <div class="icon">📦</div>
-        <p>유저를 선택하면 주문 내역을 볼 수 있습니다.</p>
+        <p>이름을 입력하면 주문 내역을 볼 수 있습니다.</p>
       </div>
     </div>
   </div>
@@ -370,30 +378,50 @@
     </div>
   </div>
 
+  <!-- ── 탭 5: 성능 측정 ── -->
+  <div id="tab-benchmark" class="tab-panel">
+    <div class="card">
+      <h2>쿼리 성능 측정 (Benchmark)</h2>
+      <div class="bench-controls">
+        <span style="font-size:.9rem;font-weight:600;">실행 횟수:</span>
+        <button class="runs-btn" onclick="setRuns(5,this)">5회</button>
+        <button class="runs-btn active" onclick="setRuns(10,this)">10회</button>
+        <button class="runs-btn" onclick="setRuns(20,this)">20회</button>
+        <button class="runs-btn" onclick="setRuns(50,this)">50회</button>
+        <button class="btn btn-primary" onclick="runBenchmark()">측정 시작</button>
+      </div>
+      <div id="bench-result">
+        <div class="empty-state">
+          <div class="icon">⏱️</div>
+          <p>측정 시작 버튼을 누르면 각 쿼리 유형별 실행 시간을 측정합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <script>
   // ── 전역 상태 ────────────────────────────────────────────────
-  let cart = [];          // [{ product, quantity }]
+  let cart = [];
+  let benchRuns = 10;
   let searchTimer = null;
 
   // ── 탭 전환 ─────────────────────────────────────────────────
+  const TAB_NAMES = ['products', 'cart', 'orders', 'stats', 'benchmark'];
+
   function switchTab(name) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-
     document.getElementById(`tab-${name}`).classList.add('active');
-    document.querySelectorAll('nav button')[
-      ['products','cart','orders','stats'].indexOf(name)
-    ].classList.add('active');
+    document.querySelectorAll('nav button')[TAB_NAMES.indexOf(name)].classList.add('active');
 
-    if (name === 'cart')    renderCart();
-    if (name === 'orders')  loadUsers('order-user-select');
-    if (name === 'stats')   fetchStats();
+    if (name === 'cart')      renderCart();
+    if (name === 'stats')     fetchStats();
   }
 
   // ── 유틸 ────────────────────────────────────────────────────
-  const fmt = (n) => Number(n).toLocaleString('ko-KR') + '원';
+  const fmt = n => Number(n).toLocaleString('ko-KR') + '원';
 
   function showAlert(id, msg, type) {
     const el = document.getElementById(id);
@@ -405,25 +433,6 @@
   function debounceSearch() {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(fetchProducts, 350);
-  }
-
-  // ── 유저 목록 로드 (드롭다운용) ─────────────────────────────
-  async function loadUsers(selectId) {
-    try {
-      const users = await fetch('/users').then(r => r.json());
-      const sel   = document.getElementById(selectId);
-      const prev  = sel.value;
-      sel.innerHTML = '<option value="">-- 유저 선택 --</option>';
-      users.forEach(u => {
-        const opt = document.createElement('option');
-        opt.value       = u.id;
-        opt.textContent = `${u.name} (${u.email})`;
-        sel.appendChild(opt);
-      });
-      if (prev) sel.value = prev;
-    } catch (e) {
-      console.error('유저 로드 실패:', e);
-    }
   }
 
   // ── 상품 목록 ────────────────────────────────────────────────
@@ -447,15 +456,15 @@
       }
 
       grid.innerHTML = products.map(p => {
-        const stockClass = p.stock === 0 ? 'stock-out' : p.stock <= 5 ? 'stock-low' : 'stock-ok';
-        const stockLabel = p.stock === 0 ? '품절' : p.stock <= 5 ? `재고 ${p.stock}개` : `재고 ${p.stock}개`;
+        const sc = p.stock === 0 ? 'stock-out' : p.stock <= 5 ? 'stock-low' : 'stock-ok';
+        const sl = p.stock === 0 ? '품절' : `재고 ${p.stock}개`;
         return `
           <div class="product-card">
             <span class="category-badge">${p.category || '기타'}</span>
             <h3>${p.name}</h3>
             <p class="desc">${p.description || ''}</p>
             <div class="price">${fmt(p.price)}</div>
-            <span class="stock-badge ${stockClass}">${stockLabel}</span><br>
+            <span class="stock-badge ${sc}">${sl}</span><br>
             <button class="btn btn-primary" style="width:100%;margin-top:4px"
               ${p.stock === 0 ? 'disabled' : ''}
               onclick='addToCart(${JSON.stringify(p)})'>
@@ -473,20 +482,18 @@
     const existing = cart.find(i => i.product.id === product.id);
     if (existing) {
       if (existing.quantity >= product.stock) {
-        alert(`"${product.name}" 재고(${product.stock}개)를 초과할 수 없습니다.`);
-        return;
+        alert(`"${product.name}" 재고(${product.stock}개)를 초과할 수 없습니다.`); return;
       }
       existing.quantity++;
     } else {
       cart.push({ product, quantity: 1 });
     }
     updateCartBadge();
-    // 추가 알림
-    const msg = document.createElement('div');
-    msg.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#22c55e;color:#fff;padding:12px 20px;border-radius:8px;font-weight:600;z-index:999;animation:fadeIn .3s';
-    msg.textContent = `"${product.name}" 추가됨`;
-    document.body.appendChild(msg);
-    setTimeout(() => msg.remove(), 1800);
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#22c55e;color:#fff;padding:12px 20px;border-radius:8px;font-weight:600;z-index:999';
+    toast.textContent = `"${product.name}" 추가됨`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 1800);
   }
 
   function updateCartBadge() {
@@ -504,8 +511,7 @@
   }
 
   function clearCart() {
-    if (cart.length === 0) return;
-    if (!confirm('장바구니를 비우시겠습니까?')) return;
+    if (cart.length === 0 || !confirm('장바구니를 비우시겠습니까?')) return;
     cart = [];
     updateCartBadge();
     renderCart();
@@ -513,14 +519,11 @@
 
   function renderCart() {
     const el = document.getElementById('cart-list');
-
     if (cart.length === 0) {
       el.innerHTML = '<div class="cart-empty">장바구니가 비어 있습니다.</div>';
       return;
     }
-
     const total = cart.reduce((s, i) => s + parseFloat(i.product.price) * i.quantity, 0);
-
     el.innerHTML = `
       ${cart.map(i => `
         <div class="cart-item">
@@ -534,20 +537,16 @@
           <span style="font-size:.8rem;color:#888">${fmt(i.product.price)} × ${i.quantity}</span>
           <span class="subtotal">${fmt(parseFloat(i.product.price) * i.quantity)}</span>
           <button class="btn btn-danger" onclick="changeQty(${i.product.id}, -999)">✕</button>
-        </div>
-      `).join('')}
+        </div>`).join('')}
       <div class="cart-total">
         <span>합계</span>
         <span class="amount">${fmt(total)}</span>
       </div>`;
-
-    // 유저 드롭다운 채우기
-    loadUsers('user-select');
   }
 
   async function placeOrder() {
-    const userId = document.getElementById('user-select').value;
-    if (!userId) { showAlert('cart-alert', '주문자를 선택해주세요.', 'alert-error'); return; }
+    const userName = document.getElementById('user-name-input').value.trim();
+    if (!userName) { showAlert('cart-alert', '주문자 이름을 입력해주세요.', 'alert-error'); return; }
     if (cart.length === 0) { showAlert('cart-alert', '장바구니가 비어 있습니다.', 'alert-error'); return; }
 
     const items = cart.map(i => ({ productId: i.product.id, quantity: i.quantity }));
@@ -556,7 +555,7 @@
       const res  = await fetch('/orders', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ userId: Number(userId), items }),
+        body:    JSON.stringify({ userName, items }),
       });
       const data = await res.json();
 
@@ -565,11 +564,14 @@
         return;
       }
 
-      showAlert('cart-alert', `✅ 주문 완료! (주문번호: #${data.orderId}, 결제금액: ${fmt(data.totalAmount)})`, 'alert-success');
+      showAlert('cart-alert',
+        `주문 완료! (주문번호: #${data.orderId} / 결제금액: ${fmt(data.totalAmount)})`,
+        'alert-success'
+      );
       cart = [];
       updateCartBadge();
       renderCart();
-      fetchProducts(); // 재고 업데이트 반영
+      fetchProducts();
     } catch (e) {
       showAlert('cart-alert', `네트워크 오류: ${e.message}`, 'alert-error');
     }
@@ -577,18 +579,18 @@
 
   // ── 주문 내역 ─────────────────────────────────────────────────
   async function fetchOrders() {
-    const userId = document.getElementById('order-user-select').value;
-    const el     = document.getElementById('orders-list');
+    const userName = document.getElementById('order-name-input').value.trim();
+    const el       = document.getElementById('orders-list');
 
-    if (!userId) {
-      el.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>유저를 선택하면 주문 내역을 볼 수 있습니다.</p></div>';
+    if (!userName) {
+      el.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>이름을 입력해주세요.</p></div>';
       return;
     }
 
     el.innerHTML = '<div class="loading"><div class="spinner"></div><br>주문 내역을 불러오는 중…</div>';
 
     try {
-      const orders = await fetch(`/orders/${userId}`).then(r => r.json());
+      const orders = await fetch(`/orders/${encodeURIComponent(userName)}`).then(r => r.json());
 
       if (orders.length === 0) {
         el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>주문 내역이 없습니다.</p></div>';
@@ -597,18 +599,17 @@
 
       el.innerHTML = orders.map(o => {
         const date = new Date(o.created_at).toLocaleString('ko-KR');
-        const itemsHtml = o.items.map(i => `
-          <div class="order-item-row">
+        const itemsHtml = o.items.map(i =>
+          `<div class="order-item-row">
             <span>${i.product_name} × ${i.quantity}</span>
             <span>${fmt(i.subtotal)}</span>
           </div>`).join('');
-
         return `
           <div class="order-card">
             <div class="order-header">
               <div>
                 <span class="order-id">주문 #${o.order_id}</span>
-                <span class="order-date" style="margin-left:10px">${date}</span>
+                <span class="order-date">${date}</span>
               </div>
               <span class="order-total">${fmt(o.total_amount)}</span>
             </div>
@@ -626,40 +627,35 @@
     el.innerHTML = '<div class="loading"><div class="spinner"></div><br>통계를 불러오는 중…</div>';
 
     try {
-      const stats = await fetch('/stats').then(r => r.json());
+      const stats  = await fetch('/stats').then(r => r.json());
       const maxRev = Math.max(...stats.map(s => parseFloat(s.total_revenue)), 1);
 
       el.innerHTML = `
         <table class="stats-table">
           <thead>
             <tr>
-              <th style="width:40px">#</th>
+              <th style="width:36px">#</th>
               <th>상품명</th>
               <th>카테고리</th>
               <th style="text-align:right">판매 수량</th>
-              <th style="min-width:200px">매출 (비율)</th>
+              <th style="min-width:220px">매출</th>
             </tr>
           </thead>
           <tbody>
             ${stats.map((s, i) => {
               const pct = Math.round(parseFloat(s.total_revenue) / maxRev * 100);
-              return `
-                <tr>
-                  <td class="rank">${i + 1}</td>
-                  <td><strong>${s.name}</strong></td>
-                  <td><span class="category-badge">${s.category || '기타'}</span></td>
-                  <td style="text-align:right">${Number(s.total_quantity_sold).toLocaleString()}개</td>
-                  <td>
-                    <div class="revenue-bar">
-                      <div class="bar-track">
-                        <div class="bar-fill" style="width:${pct}%"></div>
-                      </div>
-                      <span style="font-size:.85rem;font-weight:600;min-width:80px;text-align:right">
-                        ${fmt(s.total_revenue)}
-                      </span>
-                    </div>
-                  </td>
-                </tr>`;
+              return `<tr>
+                <td class="rank">${i + 1}</td>
+                <td><strong>${s.name}</strong></td>
+                <td><span class="category-badge">${s.category || '기타'}</span></td>
+                <td style="text-align:right">${Number(s.total_quantity_sold).toLocaleString()}개</td>
+                <td>
+                  <div class="revenue-bar">
+                    <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+                    <span style="font-size:.85rem;font-weight:600;min-width:90px;text-align:right">${fmt(s.total_revenue)}</span>
+                  </div>
+                </td>
+              </tr>`;
             }).join('')}
           </tbody>
         </table>`;
@@ -668,9 +664,63 @@
     }
   }
 
+  // ── 성능 측정 ─────────────────────────────────────────────────
+  function setRuns(n, btn) {
+    benchRuns = n;
+    document.querySelectorAll('.runs-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  async function runBenchmark() {
+    const el = document.getElementById('bench-result');
+    el.innerHTML = '<div class="loading"><div class="spinner"></div><br>측정 중… (잠시 기다려주세요)</div>';
+
+    try {
+      const t0      = performance.now();
+      const results = await fetch(`/benchmark?runs=${benchRuns}`).then(r => r.json());
+      const elapsed = (performance.now() - t0).toFixed(0);
+
+      const maxAvg = Math.max(...results.map(r => r.avg_ms), 1);
+
+      el.innerHTML = `
+        <table class="bench-table">
+          <thead>
+            <tr>
+              <th>쿼리 유형</th>
+              <th style="text-align:right">평균 (ms)</th>
+              <th style="text-align:right">최소 (ms)</th>
+              <th style="text-align:right">최대 (ms)</th>
+              <th style="min-width:160px">상대 속도</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${results.map((r, i) => {
+              const pct     = Math.round(r.avg_ms / maxAvg * 100);
+              const fastest = r.avg_ms === Math.min(...results.map(x => x.avg_ms));
+              const slowest = r.avg_ms === Math.max(...results.map(x => x.avg_ms));
+              const cls     = fastest ? 'ms-fast' : slowest ? 'ms-slow' : 'ms-val';
+              return `<tr>
+                <td>${r.name}</td>
+                <td style="text-align:right"><span class="${cls}">${r.avg_ms}</span></td>
+                <td style="text-align:right">${r.min_ms}</td>
+                <td style="text-align:right">${r.max_ms}</td>
+                <td>
+                  <div class="revenue-bar">
+                    <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${fastest?'#22c55e':slowest?'#ef4444':'#4f6ef7'}"></div></div>
+                  </div>
+                </td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+        <p class="bench-note">각 쿼리를 ${benchRuns}회 실행 · 총 소요: ${elapsed}ms · 빠름: 초록 / 느림: 빨강</p>`;
+    } catch (e) {
+      el.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>오류: ${e.message}</p></div>`;
+    }
+  }
+
   // ── 초기 로드 ─────────────────────────────────────────────────
   fetchProducts();
-  loadUsers('user-select');
 </script>
 
 </body>

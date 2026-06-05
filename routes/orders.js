@@ -4,11 +4,11 @@ const pool    = require('../db');
 
 // POST /orders — 주문 생성 (트랜잭션)
 router.post('/', async (req, res) => {
-  const { userId, items } = req.body;
+  const { userName, items } = req.body;
   // items: [{ productId: number, quantity: number }, ...]
 
-  if (!userId || !Array.isArray(items) || items.length === 0) {
-    return res.status(400).json({ error: '유저 ID와 주문 항목이 필요합니다.' });
+  if (!userName || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: '주문자 이름과 주문 항목이 필요합니다.' });
   }
 
   // 트랜잭션은 단일 클라이언트를 pool에서 직접 꺼내 사용해야 한다
@@ -47,8 +47,8 @@ router.post('/', async (req, res) => {
 
     // orders 테이블 삽입
     const orderResult = await client.query(
-      'INSERT INTO orders (user_id, total_amount, status) VALUES ($1, $2, $3) RETURNING id',
-      [userId, totalAmount, 'completed']
+      'INSERT INTO orders (user_name, total_amount, status) VALUES ($1, $2, $3) RETURNING id',
+      [userName, totalAmount, 'completed']
     );
     const orderId = orderResult.rows[0].id;
 
@@ -69,11 +69,7 @@ router.post('/', async (req, res) => {
     // ── COMMIT: 모든 작업 성공 → 영구 반영 ──────────────────
     await client.query('COMMIT');
 
-    res.status(201).json({
-      orderId,
-      totalAmount,
-      message: '주문이 완료되었습니다.',
-    });
+    res.status(201).json({ orderId, totalAmount, message: '주문이 완료되었습니다.' });
   } catch (err) {
     // ── ROLLBACK: 오류 발생 → 전체 취소 ─────────────────────
     await client.query('ROLLBACK');
@@ -84,14 +80,15 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /orders/:userId — 유저 주문 내역 (orders + order_items + products JOIN)
-router.get('/:userId', async (req, res) => {
+// GET /orders/:userName — 주문자 이름으로 주문 내역 조회 (2-테이블 JOIN)
+router.get('/:userName', async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userName } = req.params;
 
     const result = await pool.query(
       `SELECT
          o.id           AS order_id,
+         o.user_name,
          o.total_amount,
          o.status,
          o.created_at,
@@ -106,12 +103,12 @@ router.get('/:userId', async (req, res) => {
            ORDER BY oi.id
          ) AS items
        FROM orders o
-       JOIN order_items oi ON o.id  = oi.order_id
+       JOIN order_items oi ON o.id = oi.order_id
        JOIN products     p  ON oi.product_id = p.id
-       WHERE o.user_id = $1
+       WHERE o.user_name = $1
        GROUP BY o.id
        ORDER BY o.created_at DESC`,
-      [userId]
+      [userName]
     );
 
     res.json(result.rows);
